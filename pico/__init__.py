@@ -192,7 +192,7 @@ class Response(object):
 
 def convert_keys(obj):
     if type(obj) == dict:  # convert non string keys to strings
-        return dict((str(k), convert_keys(obj[k])) for k in obj)
+        return dict((unicode(k), convert_keys(obj[k])) for k in obj)
     else:
         return obj
 

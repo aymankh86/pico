@@ -61,7 +61,7 @@ def _stream(url, encoded_args=""):
         c.close()
 
 
-def _call_function(module, function, args, stream=False): 
+def _call_function(module, function, args, stream=False):
     for k in args:
         args[k] = pico.to_json(args[k])
     # args['_function'] = function
@@ -69,7 +69,7 @@ def _call_function(module, function, args, stream=False):
     return get(url + '%s/%s/'%(module, function), args, stream)
 
 def authenticate(username, password):
-    """ 
+    """
     Authenticate with the pico server
 
     You must call this function before calling any protected functions.
@@ -81,7 +81,7 @@ def authenticate(username, password):
     try:
         r = _call_function('pico', 'authenticate', locals())
         return True
-    except Exception, e:
+    except Exception as e:
         r = str(e)
         if r.startswith('Bad nonce.'):
             global _td
@@ -100,8 +100,8 @@ def unauthenticate():
     return True
 
 def load(module_name):
-    """ 
-    Load a remote module 
+    """
+    Load a remote module
     pico.client.url must be set to the appropriate pico url first.
     e.g. pico.client.url="http://localhost:8800/pico/"
 
@@ -133,4 +133,4 @@ def _hash(s):
     m = hashlib.md5()
     m.update(s)
     return m.hexdigest()
-    
+

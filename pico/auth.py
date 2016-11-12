@@ -37,7 +37,7 @@ class object(pico.object):
                 assert(scheme == 'Basic')
                 username, password = data.decode('base64').split(':', 1)
                 self.user = self._get_user(username, password)
-            except Exception, e:
+            except Exception as e:
                 raise NotAuthorizedError(str(e))
         elif 'HTTP_X_SESSION_ID' in request:
             session_id = request.get('HTTP_X_SESSION_ID')

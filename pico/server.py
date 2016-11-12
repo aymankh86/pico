@@ -8,7 +8,12 @@ import hashlib
 import traceback
 import getopt
 import re
-import SocketServer
+
+try:
+    import SocketServer
+except ImportError:
+    import socketserver as SocketServer
+
 import threading
 from wsgiref.simple_server import WSGIRequestHandler, WSGIServer, make_server
 
@@ -390,13 +395,13 @@ def wsgi_app(environ, start_response, enable_static=False):
             elif enable_static:
                 try:
                     response = static_file_handler(path)
-                except OSError, e:
+                except OSError as e:
                     response = not_found_error(path)
             else:
                 response = not_found_error(path)
-        except PicoError, e:
+        except PicoError as e:
             response = e.response
-        except Exception, e:
+        except Exception as e:
             response = generate_exception_report(e, path, params)
     start_response(response.status, response.headers)
     return response.output

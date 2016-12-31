@@ -13,7 +13,7 @@ import os
 import decimal
 import datetime
 import inspect
-from builtins import basestring
+from past.builtins import basestring
 
 import wrapt
 

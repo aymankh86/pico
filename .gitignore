@@ -6,3 +6,4 @@ MANIFEST
 dist/*
 
 ship.sh
+*.un~

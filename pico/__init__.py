@@ -13,6 +13,7 @@ import os
 import decimal
 import datetime
 import inspect
+from builtins import basestring
 
 import wrapt
 

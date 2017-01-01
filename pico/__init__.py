@@ -211,7 +211,7 @@ def to_json(obj, extra_json_dumpers=None):
                 obj = json_dumpers_[type(obj)](obj)
                 convert_keys(obj)
                 return obj
-            for obj_type, dumper in json_dumpers_.iteritems():
+            for obj_type, dumper in json_dumpers_.items():
                 if isinstance(obj, obj_type):
                     return dumper(obj)
             if hasattr(obj, 'as_json'):

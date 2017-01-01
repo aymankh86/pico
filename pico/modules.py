@@ -5,6 +5,7 @@ import sys
 import types
 import time
 import importlib
+from future.moves.itertools import zip_longest
 
 import pico
 
@@ -30,8 +31,8 @@ def module_dict(module):
                 and (issubclass(c, pico.Pico) or issubclass(c, pico.object))
                 and (pico_exports is None or name in pico_exports)
                 and c.__module__ == module.__name__)
-    class_defs = map(class_dict, filter(class_filter, members))
-    function_defs = map(func_dict, filter(function_filter, members))
+    class_defs = list(map(class_dict, filter(class_filter, members)))
+    function_defs = list(map(func_dict, filter(function_filter, members)))
     module_dict['classes'] = class_defs
     module_dict['functions'] = function_defs
     module_dict['__doc__'] = module.__doc__
@@ -51,7 +52,7 @@ def class_dict(x):
     class_dict['name'] = name
     methods = filter(method_filter, inspect.getmembers(cls))
     class_dict['__init__'] = func_dict(methods.pop(0))
-    class_dict['functions'] = map(func_dict, methods)
+    class_dict['functions'] = list(map(func_dict, methods))
     class_dict['__doc__'] = cls.__doc__
     class_dict['__headers__'] = getattr(cls, '__headers__', {})
     return class_dict
@@ -64,10 +65,10 @@ def func_dict(x):
     func_dict['cache'] = ((hasattr(f, 'cacheable') and f.cacheable))
     func_dict['stream'] = ((hasattr(f, 'stream') and f.stream))
     a = inspect.getargspec(f)
-    arg_list_r = reversed(a.args)
-    defaults_list_r = reversed(a.defaults or [None])
-    args = reversed(map(None, arg_list_r, defaults_list_r))
-    args = filter(lambda x: x[0] and x[0] != 'self', args)
+    arg_list_r = a.args[::-1]
+    defaults_list_r = a.defaults[::-1] if a.defaults else [None]
+    args = list(zip_longest(arg_list_r, defaults_list_r))[::-1]
+    args = list(filter(lambda x: x[0] and x[0] != 'self', args))
     func_dict['args'] = args
     func_dict['doc'] = f.__doc__
     return func_dict
